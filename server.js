@@ -4,7 +4,7 @@ const mysql = require("mysql");
 // Enable access to .env variables
 // require("dotenv").config();
 
-const connection = mysql.createConnection({
+const connect ql.createConnection({
   host: "localhost",
 
   // Your port; if not 3306
