@@ -1,4 +1,4 @@
-const connection = require('./connection');
+const connection = require("./connection");
 
 class Query {
   constructor(connection) {
@@ -8,18 +8,17 @@ class Query {
   //query all employees from table
   getAllEmployees() {
     return this.connection.promise().query("SELECT * FROM employee");
-    };
+  }
 
   //query all dep from table
   getAllDepartments() {
     return this.connection.promise().query("SELECT * FROM department");
-  };
+  }
 
   //query all role from table
   getAllRoles() {
     return this.connection.promise().query("SELECT * FROM roles");
-  };
-  
-};
+  }
+}
 
-modules.export = new Query(connection);
+module.export = new Query(connection);

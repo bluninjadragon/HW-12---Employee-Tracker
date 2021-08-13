@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-// const db = require("./db");
+const db = require("./db/query");
 const mysql = require("mysql");
 // Enable access to .env variables
 // require("dotenv").config();
@@ -47,24 +47,25 @@ const start = () => {
     });
 };
 
-//function for calling READ route
-// const view = () => {
-//     inquirer.prompt([
-//       {
-//         name: "view",
-//         type: "list",
-//         message: "What would you like to VIEW?",
-//         choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
-//       }
-//     ])
-//     .then((answer) => {
-//       switch (answer.view) {
-//         case 'DEPARTMENT':
-//           db.Query.getAllDepartment();
-//           break;
-//       };
-//     });
-//   };
+// function for calling READ route
+const view = () => {
+  inquirer
+    .prompt([
+      {
+        name: "view",
+        type: "list",
+        message: "What would you like to VIEW?",
+        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+      },
+    ])
+    .then((answer) => {
+      switch (answer.view) {
+        case "DEPARTMENT":
+          db.getAllDepartments();
+          break;
+      }
+    });
+};
 
 //function for calling CREATE route
 const add = () => {
@@ -201,8 +202,11 @@ const addRole = () => {
           //used the greatbaybasic.js file in 12-10 to find this example for pointing to the table in real time and displaying all current choices of a specific column in a table
           choices() {
             const choiceArray = [];
-            results.forEach(({ department_name }) => {
-              choiceArray.push(department_name);
+            results.forEach(({ id, department_name }) => {
+              choiceArray.push({
+                name: department_name,
+                value: id,
+              });
             });
             return choiceArray;
           },
@@ -218,7 +222,7 @@ const addRole = () => {
 
             // QUESTION!
             // HOW DO I ADD DEPARTMENT_ID USING FOREIGN KEY LOGIC??
-            department_id: answer.salary,
+            department_id: answer.roleDept,
           },
           (err) => {
             if (err) throw err;
