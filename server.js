@@ -1,6 +1,8 @@
 const inquirer = require("inquirer");
-const db = require("./db/query");
+// const db = require("./db/query");
 const mysql = require("mysql");
+
+require("console.table");
 // Enable access to .env variables
 // require("dotenv").config();
 
@@ -61,12 +63,18 @@ const view = () => {
     .then((answer) => {
       switch (answer.view) {
         case "DEPARTMENT":
-          db.getAllDepartments();
+          viewDepartment();
           break;
       }
     });
 };
 
+const viewDepartment = () => {
+  connection.query("SELECT * FROM department", function (error, results) {
+    if (error) throw error;
+    console.table(results);
+  });
+};
 //function for calling CREATE route
 const add = () => {
   inquirer
