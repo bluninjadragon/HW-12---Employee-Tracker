@@ -29,5 +29,13 @@ CREATE TABLE employee(
   PRIMARY KEY (id)
 );
 
+-- starting/sample data
+
 INSERT INTO department (department_name)
 VALUES ("Internal Medicine");
+
+INSERT INTO roles (role_title, salary, department_id)
+VALUES ("Physician", "200000.01", "1");
+
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("John", "Smith", "1", "1");

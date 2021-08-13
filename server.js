@@ -23,27 +23,29 @@ connection.connect((err) => {
   start();
 });
 
-//initialize 
+//initialize
 const start = () => {
-  inquirer.prompt([
-    {
-      name: "start",
-      type: "list",
-      message: "What would you like to do?",
-      choices: ["VIEW", "ADD", "UPDATE"],
-    }])
+  inquirer
+    .prompt([
+      {
+        name: "start",
+        type: "list",
+        message: "What would you like to do?",
+        choices: ["VIEW", "ADD", "UPDATE"],
+      },
+    ])
     .then((answer) => {
       switch (answer.start) {
-        case 'VIEW':
+        case "VIEW":
           view();
           break;
 
-        case 'ADD':
+        case "ADD":
           add();
-        break;
-      };
+          break;
+      }
     });
-}
+};
 
 //function for calling READ route
 // const view = () => {
@@ -66,48 +68,90 @@ const start = () => {
 
 //function for calling CREATE route
 const add = () => {
-  inquirer.prompt([
-    {
-      name: "add",
-      type: "list",
-      message: "What would you like to ADD?",
-      choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
-    }
-  ])
-  .then((answer) => {
-    switch (answer.add) {
-      case 'DEPARTMENT':
-        addDepartment();
-        break;
-    };
-  });
+  inquirer
+    .prompt([
+      {
+        name: "add",
+        type: "list",
+        message: "What would you like to ADD?",
+        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+      },
+    ])
+    .then((answer) => {
+      switch (answer.add) {
+        case "DEPARTMENT":
+          addDepartment();
+          break;
+      }
+    });
 };
 
 //function for creating a new department
 const addDepartment = () => {
-  inquirer.prompt([
-    {
-      name: "add_department",
-      type: "input",
-      message: "What would you like to call the new DEPARTMENT?",
-    }
-  ])
-  .then((answer) => {
-    // when finished prompting, insert a new item into the db with that info
-    connection.query(
-      'INSERT INTO department SET ?',
+  inquirer
+    .prompt([
       {
-        department_name: answer.add_department,
+        name: "deptname",
+        type: "input",
+        message: "What would you like to call the new DEPARTMENT?",
       },
-      (err) => {
-        if (err) throw err;
-        console.log('Your DEPARTMENT was created successfully!');
-        // re-prompt the user for if they want to bid or post
-        start();
-      }
-    );
-  });
+    ])
+    .then((answer) => {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          department_name: answer.deptname,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log("Your DEPARTMENT was created successfully!");
+          // re-prompt the user for if they want to bid or post
+          start();
+        }
+      );
+    });
 };
 
-
-
+//function for creating a new department
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        name: "rolename",
+        type: "input",
+        message: "What would you like to call the new ROLE?",
+      },
+      {
+        name: "salary",
+        type: "number",
+        message: "What is the salary for this new ROLE?",
+      },
+      {
+        name: "roledept",
+        type: "list",
+        message: "What is the department for this new ROLE?",
+        choices: ["Internal Medicine", "Cardiology", "OBGYN"],
+      },
+    ])
+    .then((answer) => {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        "INSERT INTO roles SET ?",
+        {
+          role_title: answer.rolename,
+          salary: answer.salary,
+          
+        // QUESTION!
+        // HOW DO I ADD DEPARTMENT_ID USING FOREIGN KEY LOGIC??
+          department_id: answer.choices
+        },
+        (err) => {
+          if (err) throw err;
+          console.log("Your ROLE was created successfully!");
+          // re-prompt the user for if they want to bid or post
+          start();
+        }
+      );
+    });
+};
