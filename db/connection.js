@@ -1,5 +1,6 @@
 const mysql = require("mysql");
-
+// Enable access to .env variables
+require('dotenv').config();
 
 const connection = mysql.createConnection({
   host: "localhost",

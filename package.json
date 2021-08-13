@@ -1,15 +1,28 @@
 {
-  "name": "top-5000-songs",
+  "name": "HW-12---Employee-Tracker",
   "version": "1.0.0",
   "description": "",
-  "main": "TopSongsCode.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "server.js",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "inquirer": "^8.1.2",
+    "mysql": "^2.18.1"
   },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluninjadragon/HW-12---Employee-Tracker.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "inquirer": "^6.2.1",
-    "mysql": "^2.16.0"
-  }
+  "bugs": {
+    "url": "https://github.com/bluninjadragon/HW-12---Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/bluninjadragon/HW-12---Employee-Tracker#readme"
 }
