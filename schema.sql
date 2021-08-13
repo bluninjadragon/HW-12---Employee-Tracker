@@ -30,4 +30,4 @@ CREATE TABLE employee(
 );
 
 INSERT INTO department (department_name)
-VALUES ("vanilla");
+VALUES ("Internal Medicine");

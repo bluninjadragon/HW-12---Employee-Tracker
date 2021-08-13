@@ -10,10 +10,16 @@ class Query {
     return this.connection.promise().query("SELECT * FROM employee");
     };
 
-  //query all employees from table
+  //query all dep from table
   getAllDepartments() {
     return this.connection.promise().query("SELECT * FROM department");
-  }
+  };
+
+  //query all role from table
+  getAllRoles() {
+    return this.connection.promise().query("SELECT * FROM roles");
+  };
+  
 };
 
 modules.export = new Query(connection);
