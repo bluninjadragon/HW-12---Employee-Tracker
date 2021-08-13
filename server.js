@@ -156,7 +156,7 @@ const addDepartment = () => {
   inquirer
     .prompt([
       {
-        name: "deptname",
+        name: "deptName",
         type: "input",
         message: "What would you like to call the new DEPARTMENT?",
       },
@@ -166,7 +166,7 @@ const addDepartment = () => {
       connection.query(
         "INSERT INTO department SET ?",
         {
-          department_name: answer.deptname,
+          department_name: answer.deptName,
         },
         (err) => {
           if (err) throw err;
@@ -185,7 +185,7 @@ const addRole = () => {
     inquirer
       .prompt([
         {
-          name: "rolename",
+          name: "roleName",
           type: "input",
           message: "What would you like to call the new ROLE?",
         },
@@ -195,7 +195,7 @@ const addRole = () => {
           message: "What is the salary for this new ROLE?",
         },
         {
-          name: "roledept",
+          name: "roleDept",
           type: "list",
           message: "What is the department for this new ROLE?",
           //used the greatbaybasic.js file in 12-10 to find this example for pointing to the table in real time and displaying all current choices of a specific column in a table
@@ -213,12 +213,62 @@ const addRole = () => {
         connection.query(
           "INSERT INTO roles SET ?",
           {
-            role_title: answer.rolename,
+            role_title: answer.roleName,
             salary: answer.salary,
 
             // QUESTION!
             // HOW DO I ADD DEPARTMENT_ID USING FOREIGN KEY LOGIC??
-            department_id: answer.choices,
+            department_id: answer.salary,
+          },
+          (err) => {
+            if (err) throw err;
+            console.log("Your ROLE was created successfully!");
+            // re-prompt the user for if they want to repeat
+            start();
+          }
+        );
+      });
+  });
+};
+
+//function for creating new employee
+const addEmployee = () => {
+  connection.query("SELECT * FROM roles", (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "firstName",
+          type: "input",
+          message: "What's the EMPLOYEE's first name?",
+        },
+        {
+          name: "lastName",
+          type: "number",
+          message: "What's the EMPLOYEE's last name?",
+        },
+        {
+          name: "employeeRole",
+          type: "rawlist",
+          message: "What's the EMPLOYEE's job title/role?",
+          //used the greatbaybasic.js file in 12-10 to find this example for pointing to the table in real time and displaying all current choices of a specific column in a table
+          choices() {
+            const choiceArray = [];
+            results.forEach(({ role_title }) => {
+              choiceArray.push(role_title);
+            });
+            return choiceArray;
+          },
+        },
+      ])
+      .then((answer) => {
+        // when finished prompting, insert a new item into the db with that info
+        connection.query(
+          "INSERT INTO employee SET ?",
+          {
+            first_name: answer.firstName,
+            last_name: answer.lastName,
+            role_id: answer.employeeRole,
           },
           (err) => {
             if (err) throw err;
