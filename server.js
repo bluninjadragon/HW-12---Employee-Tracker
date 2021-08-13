@@ -45,6 +45,10 @@ const start = () => {
         case "ADD":
           add();
           break;
+
+        case "UPDATE":
+          add();
+          break;
       }
     });
 };
@@ -106,34 +110,34 @@ const add = () => {
 };
 
 // //function for calling UPDATE route
-// const update = () => {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "update",
-//         type: "list",
-//         message: "What would you like to UPDATE?",
-//         choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
-//       },
-//     ])
-//     .then((answer) => {
-//       switch (answer.update) {
-//         case "DEPARTMENT":
-//           updateDepartment();
-//           break;
-//       }
-//       switch (answer.update) {
-//         case "ROLE":
-//           updateRole();
-//           break;
-//       }
-//       switch (answer.update) {
-//         case "EMPLOYEE":
-//           updateEmployee();
-//           break;
-//       }
-//     });
-// };
+const update = () => {
+  inquirer
+    .prompt([
+      {
+        name: "update",
+        type: "list",
+        message: "What would you like to UPDATE?",
+        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+      },
+    ])
+    .then((answer) => {
+      switch (answer.update) {
+        case "DEPARTMENT":
+          updateDepartment();
+          break;
+      }
+      switch (answer.update) {
+        case "ROLE":
+          updateRole();
+          break;
+      }
+      switch (answer.update) {
+        case "EMPLOYEE":
+          updateEmployee();
+          break;
+      }
+    });
+};
 
 // const updateDepartment = () => {
 //   connection.query('SELECT * FROM department', (err, results) => {
@@ -230,6 +234,7 @@ const addRole = () => {
 
             // QUESTION!
             // HOW DO I ADD DEPARTMENT_ID USING FOREIGN KEY LOGIC??
+            // Tutor-Answer: turn the choices() function into an OBJECT to capture the value
             department_id: answer.roleDept,
           },
           (err) => {
@@ -256,25 +261,28 @@ const addEmployee = () => {
         },
         {
           name: "lastName",
-          type: "number",
+          type: "input",
           message: "What's the EMPLOYEE's last name?",
         },
         {
           name: "employeeRole",
-          type: "rawlist",
+          type: "list",
           message: "What's the EMPLOYEE's job title/role?",
           //used the greatbaybasic.js file in 12-10 to find this example for pointing to the table in real time and displaying all current choices of a specific column in a table
           choices() {
             const choiceArray = [];
-            results.forEach(({ role_title }) => {
-              choiceArray.push(role_title);
+            results.forEach(({ id, role_title }) => {
+              choiceArray.push({
+                name: role_title,
+                value: id,
+              });
             });
             return choiceArray;
           },
         },
       ])
       .then((answer) => {
-        // when finished prompting, insert a new item into the db with that info
+        // when finished   prompting, insert a new item into the db with that info
         connection.query(
           "INSERT INTO employee SET ?",
           {
