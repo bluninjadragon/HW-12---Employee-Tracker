@@ -96,34 +96,60 @@ const add = () => {
     });
 };
 
-const update = () => {
-  inquirer
-    .prompt([
-      {
-        name: "update",
-        type: "list",
-        message: "What would you like to UPDATE?",
-        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
-      },
-    ])
-    .then((answer) => {
-      switch (answer.update) {
-        case "DEPARTMENT":
-          addDepartment();
-          break;
-      }
-      switch (answer.update) {
-        case "ROLE":
-          addRole();
-          break;
-      }
-      switch (answer.update) {
-        case "EMPLOYEE":
-          addEmployee();
-          break;
-      }
-    });
-};
+// //function for calling UPDATE route
+// const update = () => {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "update",
+//         type: "list",
+//         message: "What would you like to UPDATE?",
+//         choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+//       },
+//     ])
+//     .then((answer) => {
+//       switch (answer.update) {
+//         case "DEPARTMENT":
+//           updateDepartment();
+//           break;
+//       }
+//       switch (answer.update) {
+//         case "ROLE":
+//           updateRole();
+//           break;
+//       }
+//       switch (answer.update) {
+//         case "EMPLOYEE":
+//           updateEmployee();
+//           break;
+//       }
+//     });
+// };
+
+// const updateDepartment = () => {
+//   connection.query('SELECT * FROM department', (err, results) => {
+//     if (err) throw err;
+//     inquirer.prompt([
+//       {
+//         name: "deptname",
+//         type: "rawlist",
+//         message: "Which DEPARTMENT do you want to udpate?",
+//         // QUESTION
+//         // HOW TO LIST CHOICES?
+//         // SELF-ANSWERED: This function returns an array for the department_name column for each row in the department table (check with tutor if this is correct)
+//         choices() {
+//           const choiceArray = [];
+//           results.forEach(({ department_name }) => {
+//             choiceArray.push(department_name);
+//           });
+//           return choiceArray;
+//         },
+//       }
+//     ])
+//       .then(answer) => {
+
+//     }
+//   };
 
 //function for creating a new department
 const addDepartment = () => {
@@ -154,6 +180,8 @@ const addDepartment = () => {
 
 //function for creating a new role
 const addRole = () => {
+  // connection.query('SELECT * FROM department', (err, results) => {
+  //    if (err) throw err;
   inquirer
     .prompt([
       {
@@ -170,6 +198,13 @@ const addRole = () => {
         name: "roledept",
         type: "list",
         message: "What is the department for this new ROLE?",
+        // choices() {
+        //   const choiceArray = [];
+        //   results.forEach(({ department_name }) => {
+        //     choiceArray.push(department_name);
+        //   });
+        //   return choiceArray;
+        // },
         choices: ["Internal Medicine", "Cardiology", "OBGYN"],
       },
     ])
