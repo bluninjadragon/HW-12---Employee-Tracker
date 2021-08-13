@@ -83,6 +83,45 @@ const add = () => {
           addDepartment();
           break;
       }
+      switch (answer.add) {
+        case "ROLE":
+          addRole();
+          break;
+      }
+      switch (answer.add) {
+        case "EMPLOYEE":
+          addEmployee();
+          break;
+      }
+    });
+};
+
+const update = () => {
+  inquirer
+    .prompt([
+      {
+        name: "update",
+        type: "list",
+        message: "What would you like to UPDATE?",
+        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+      },
+    ])
+    .then((answer) => {
+      switch (answer.update) {
+        case "DEPARTMENT":
+          addDepartment();
+          break;
+      }
+      switch (answer.update) {
+        case "ROLE":
+          addRole();
+          break;
+      }
+      switch (answer.update) {
+        case "EMPLOYEE":
+          addEmployee();
+          break;
+      }
     });
 };
 
@@ -106,14 +145,14 @@ const addDepartment = () => {
         (err) => {
           if (err) throw err;
           console.log("Your DEPARTMENT was created successfully!");
-          // re-prompt the user for if they want to bid or post
+          // re-prompt the user for if they want to repeat
           start();
         }
       );
     });
 };
 
-//function for creating a new department
+//function for creating a new role
 const addRole = () => {
   inquirer
     .prompt([
@@ -141,15 +180,15 @@ const addRole = () => {
         {
           role_title: answer.rolename,
           salary: answer.salary,
-          
-        // QUESTION!
-        // HOW DO I ADD DEPARTMENT_ID USING FOREIGN KEY LOGIC??
-          department_id: answer.choices
+
+          // QUESTION!
+          // HOW DO I ADD DEPARTMENT_ID USING FOREIGN KEY LOGIC??
+          department_id: answer.choices,
         },
         (err) => {
           if (err) throw err;
           console.log("Your ROLE was created successfully!");
-          // re-prompt the user for if they want to bid or post
+          // re-prompt the user for if they want to repeat
           start();
         }
       );
