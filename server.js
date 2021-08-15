@@ -47,7 +47,7 @@ const start = () => {
           break;
 
         case "UPDATE":
-          add();
+          update();
           break;
       }
     });
@@ -69,6 +69,12 @@ const view = () => {
         case "DEPARTMENT":
           viewDepartment();
           break;
+        case "ROLE":
+          viewRole();
+          break;
+        case "EMPLOYEE":
+          viewEmployee();
+          break;
       }
     });
 };
@@ -77,6 +83,7 @@ const viewDepartment = () => {
   connection.query("SELECT * FROM department", function (error, results) {
     if (error) throw error;
     console.table(results);
+    start();
   });
 };
 //function for calling CREATE route
@@ -139,31 +146,54 @@ const update = () => {
     });
 };
 
-// const updateDepartment = () => {
-//   connection.query('SELECT * FROM department', (err, results) => {
-//     if (err) throw err;
-//     inquirer.prompt([
-//       {
-//         name: "deptname",
-//         type: "rawlist",
-//         message: "Which DEPARTMENT do you want to udpate?",
-//         // QUESTION
-//         // HOW TO LIST CHOICES?
-//         // SELF-ANSWERED: This function returns an array for the department_name column for each row in the department table (check with tutor if this is correct)
-//         choices() {
-//           const choiceArray = [];
-//           results.forEach(({ department_name }) => {
-//             choiceArray.push(department_name);
-//           });
-//           return choiceArray;
-//         },
-//       }
-//     ])
-//       .then(answer) => {
-
-//     }
-//   };
-
+const updateDepartment = () => {
+  connection.query('SELECT * FROM department', (err, results) => {
+    if (err) throw err;
+    inquirer.prompt([
+      {
+        name: "deptName",
+        type: "list",
+        message: "Which DEPARTMENT do you want to udpate?",
+        choices() {
+          const choiceArray = [];
+          results.forEach(({ department_name, id }) => {
+            choiceArray.push(
+            {
+              name: department_name,
+              value: id,
+            });
+          });
+          return choiceArray;
+        },
+      },
+    {
+      name: "updatedName",
+      type: "input",
+      message: "What would you like to rename the DEPARTMENT to?"
+    },
+    ])
+    .then((answer) => {
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        "UPDATE department SET ? WHERE ?",
+        [
+          {
+            department_name: answer.updatedName
+          },
+          {
+            id: answer.deptName,
+          }
+        ],
+        (err) => {
+          if (err) throw err;
+          console.log("Your ROLE was created successfully!");
+          // re-prompt the user for if they want to repeat
+          start();
+        }
+      );
+    });
+  });
+};
 //function for creating a new department
 const addDepartment = () => {
   inquirer
