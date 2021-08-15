@@ -79,7 +79,7 @@ const view = () => {
     });
 };
 
-//functions for viewing 
+//functions for viewing
 const viewDepartment = () => {
   connection.query("SELECT * FROM department", function (error, results) {
     if (error) throw error;
@@ -103,6 +103,7 @@ const viewEmployee = () => {
     start();
   });
 };
+
 //function for calling CREATE route
 const add = () => {
   inquirer
@@ -133,84 +134,6 @@ const add = () => {
     });
 };
 
-// //function for calling UPDATE route
-const update = () => {
-  inquirer
-    .prompt([
-      {
-        name: "update",
-        type: "list",
-        message: "What would you like to UPDATE?",
-        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
-      },
-    ])
-    .then((answer) => {
-      switch (answer.update) {
-        case "DEPARTMENT":
-          updateDepartment();
-          break;
-      }
-      switch (answer.update) {
-        case "ROLE":
-          updateRole();
-          break;
-      }
-      switch (answer.update) {
-        case "EMPLOYEE":
-          updateEmployee();
-          break;
-      }
-    });
-};
-
-const updateDepartment = () => {
-  connection.query('SELECT * FROM department', (err, results) => {
-    if (err) throw err;
-    inquirer.prompt([
-      {
-        name: "deptName",
-        type: "list",
-        message: "Which DEPARTMENT do you want to udpate?",
-        choices() {
-          const choiceArray = [];
-          results.forEach(({ department_name, id }) => {
-            choiceArray.push(
-            {
-              name: department_name,
-              value: id,
-            });
-          });
-          return choiceArray;
-        },
-      },
-    {
-      name: "updatedName",
-      type: "input",
-      message: "What would you like to rename the DEPARTMENT to?"
-    },
-    ])
-    .then((answer) => {
-      // when finished prompting, insert a new item into the db with that info
-      connection.query(
-        "UPDATE department SET ? WHERE ?",
-        [
-          {
-            department_name: answer.updatedName
-          },
-          {
-            id: answer.deptName,
-          }
-        ],
-        (err) => {
-          if (err) throw err;
-          console.log("Your ROLE was created successfully!");
-          // re-prompt the user for if they want to repeat
-          start();
-        }
-      );
-    });
-  });
-};
 //function for creating a new department
 const addDepartment = () => {
   inquirer
@@ -346,4 +269,194 @@ const addEmployee = () => {
         );
       });
   });
+};
+
+//function for calling UPDATE route
+const update = () => {
+  inquirer
+    .prompt([
+      {
+        name: "update",
+        type: "list",
+        message: "What would you like to UPDATE?",
+        choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+      },
+    ])
+    .then((answer) => {
+      switch (answer.update) {
+        case "DEPARTMENT":
+          updateDepartment();
+          break;
+      }
+      switch (answer.update) {
+        case "ROLE":
+          updateRole();
+          break;
+      }
+      switch (answer.update) {
+        case "EMPLOYEE":
+          updateEmployee();
+          break;
+      }
+    });
+};
+
+const updateDepartment = () => {
+  connection.query("SELECT * FROM department", (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "deptName",
+          type: "list",
+          message: "Which DEPARTMENT do you want to udpate?",
+          choices() {
+            const choiceArray = [];
+            results.forEach(({ department_name, id }) => {
+              choiceArray.push({
+                name: department_name,
+                value: id,
+              });
+            });
+            return choiceArray;
+          },
+        },
+        {
+          name: "updatedName",
+          type: "input",
+          message: "What would you like to rename the DEPARTMENT to?",
+        },
+      ])
+      .then((answer) => {
+        // when finished prompting, insert a new item into the db with that info
+        connection.query(
+          "UPDATE department SET ? WHERE ?",
+          [
+            {
+              department_name: answer.updatedName,
+            },
+            {
+              id: answer.deptName,
+            },
+          ],
+          (err) => {
+            if (err) throw err;
+            console.log("Your ROLE was updated successfully!");
+            // re-prompt the user for if they want to repeat
+            start();
+          }
+        );
+      });
+  });
+};
+
+const updateRole = () => {
+  connection.query("SELECT * FROM roles", (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "roleName",
+          type: "list",
+          message: "Which ROLE do you want to udpate?",
+          choices() {
+            const choiceArray = [];
+            results.forEach(({ role_title, id }) => {
+              choiceArray.push({
+                name: role_title,
+                value: id,
+              });
+            });
+            return choiceArray;
+          },
+        },
+        {
+          name: "updatedName",
+          type: "input",
+          message: "What would you like to rename the ROLE to?",
+        },
+      ])
+      .then((answer) => {
+        // when finished prompting, insert a new item into the db with that info
+        connection.query(
+          "UPDATE roles SET ? WHERE ?",
+          [
+            {
+              department_name: answer.updatedName,
+            },
+            {
+              id: answer.roleName,
+            },
+          ],
+          (err) => {
+            if (err) throw err;
+            console.log("Your ROLE was updated successfully!");
+            // re-prompt the user for if they want to repeat
+            start();
+          }
+        );
+      });
+  });
+};
+
+const updateEmployee = () => {
+  //realized for the other foreign keys, I should've been using INNER JOINs to query foreign data points such as role title from employee table
+  connection.query(
+    "SELECT employee.first_name, employee.last_name, employee.employee_id, role.role_title, FROM employee,INNER JOIN role ON employee.role_id=role.id", (err, results) => {
+      if (err) throw err;
+      inquirer
+        .prompt([
+          {
+            name: "employeeName",
+            type: "list",
+            message: "Which EMPLOYEE do you want to udpate?",
+            choices() {
+              const choiceArray = [];
+              results.forEach(({ employee.first_name, employee.last_name, id }) => {
+                choiceArray.push({
+                  name: role_title,
+                  value: id,
+                });
+              })};
+              return choiceArray;
+            },
+          },
+          {
+            name: "updatedName",
+            type: "list",
+            message: "What updated role should the EMPLOYEE have?",
+            choices() {
+              const choiceArray = [];
+              results.forEach(({ role_title, id }) => {
+                choiceArray.push({
+                  name: role_title,
+                  value: id,
+                });
+              });
+              return choiceArray;
+            },
+          },
+        ])
+        .then((answer) => {
+          // when finished prompting, insert a new item into the db with that info
+          connection.query(
+            "UPDATE employee SET ? WHERE ?",
+            [
+              {
+                role_id: answer.updatedName,
+              },
+              {
+                id: answer.employeeName,
+              },
+            ],
+            (err) => {
+              if (err) throw err;
+              console.log("Your ROLE was updated successfully!");
+              // re-prompt the user for if they want to repeat
+              start();
+            }
+          );
+        });
+    }
+  );
 };
