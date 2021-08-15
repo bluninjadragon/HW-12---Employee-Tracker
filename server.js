@@ -79,8 +79,25 @@ const view = () => {
     });
 };
 
+//functions for viewing 
 const viewDepartment = () => {
   connection.query("SELECT * FROM department", function (error, results) {
+    if (error) throw error;
+    console.table(results);
+    start();
+  });
+};
+
+const viewRole = () => {
+  connection.query("SELECT * FROM roles", function (error, results) {
+    if (error) throw error;
+    console.table(results);
+    start();
+  });
+};
+
+const viewEmployee = () => {
+  connection.query("SELECT * FROM employee", function (error, results) {
     if (error) throw error;
     console.table(results);
     start();
