@@ -19,13 +19,13 @@ CREATE TABLE roles(
 );
 
 CREATE TABLE employee(
-  id INT AUTO_INCREMENT,
+  employee_id INT AUTO_INCREMENT,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
   role_id INT default 0,
   FOREIGN KEY (role_id) REFERENCES roles(id),
   manager_id INT default 0,
-  PRIMARY KEY (id)
+  PRIMARY KEY (employee_id)
 );
 
 -- starting/sample data

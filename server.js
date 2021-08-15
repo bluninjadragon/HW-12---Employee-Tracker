@@ -341,7 +341,7 @@ const updateDepartment = () => {
           ],
           (err) => {
             if (err) throw err;
-            console.log("Your ROLE was updated successfully!");
+            console.log("Your DEPARTMENT was updated successfully!");
             // re-prompt the user for if they want to repeat
             start();
           }
@@ -402,7 +402,7 @@ const updateRole = () => {
 const updateEmployee = () => {
   //realized for the other foreign keys, I should've been using INNER JOINs to query foreign data points such as role title from employee table
   connection.query(
-    "SELECT employee.first_name, employee.last_name, employee.employee_id, role.role_title, FROM employee,INNER JOIN role ON employee.role_id=role.id", (err, results) => {
+    "SELECT employee.first_name, employee.last_name, employee.role_id, roles.role_title FROM roles INNER JOIN employee ON (employee.role_id=roles.id);", (err, results) => {
       if (err) throw err;
       inquirer
         .prompt([
@@ -412,26 +412,23 @@ const updateEmployee = () => {
             message: "Which EMPLOYEE do you want to udpate?",
             choices() {
               const choiceArray = [];
-              results.forEach(({ employee.first_name, employee.last_name, id }) => {
+              results.forEach(({ first_name, last_name, id}) => {
                 choiceArray.push({
-                  name: role_title,
+                  name: `${first_name} ${last_name}`,
                   value: id,
                 });
-              })};
+              });
               return choiceArray;
             },
           },
           {
-            name: "updatedName",
+            name: "updatedRole",
             type: "list",
             message: "What updated role should the EMPLOYEE have?",
             choices() {
               const choiceArray = [];
-              results.forEach(({ role_title, id }) => {
-                choiceArray.push({
-                  name: role_title,
-                  value: id,
-                });
+              results.forEach(({ role_title }) => {
+                choiceArray.push(role_title);
               });
               return choiceArray;
             },
@@ -443,10 +440,10 @@ const updateEmployee = () => {
             "UPDATE employee SET ? WHERE ?",
             [
               {
-                role_id: answer.updatedName,
+                role_id: answer.updatedRole,
               },
               {
-                id: answer.employeeName,
+                employee_id: answer.employeeName,
               },
             ],
             (err) => {
