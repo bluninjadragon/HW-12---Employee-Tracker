@@ -382,7 +382,7 @@ const updateRole = () => {
           "UPDATE roles SET ? WHERE ?",
           [
             {
-              department_name: answer.updatedName,
+              role_title: answer.updatedName,
             },
             {
               id: answer.roleName,
@@ -402,7 +402,8 @@ const updateRole = () => {
 const updateEmployee = () => {
   //realized for the other foreign keys, I should've been using INNER JOINs to query foreign data points such as role title from employee table
   connection.query(
-    "SELECT employee.first_name, employee.last_name, employee.role_id, roles.role_title FROM roles INNER JOIN employee ON (employee.role_id=roles.id);", (err, results) => {
+    "SELECT employee.first_name, employee.last_name, employee.role_id, roles.role_title FROM roles INNER JOIN employee ON (employee.role_id=roles.id);",
+    (err, results) => {
       if (err) throw err;
       inquirer
         .prompt([
@@ -412,10 +413,10 @@ const updateEmployee = () => {
             message: "Which EMPLOYEE do you want to udpate?",
             choices() {
               const choiceArray = [];
-              results.forEach(({ first_name, last_name, id}) => {
+              results.forEach(({ first_name, last_name, employee_id }) => {
                 choiceArray.push({
                   name: `${first_name} ${last_name}`,
-                  value: id,
+                  value: employee_id,
                 });
               });
               return choiceArray;
